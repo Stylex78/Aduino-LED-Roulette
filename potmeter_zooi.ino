@@ -2,7 +2,7 @@
 
 int pARRAY [8] = {5,6,7,8,9,10,11,12};
 int potPin = A0;
-int potVal = 0;
+float potVal = 0;
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -15,18 +15,23 @@ void setup() {
   pinMode(potPin, INPUT);
 }
 
-int potValProcessed = 0;
+float potValProcessed = 0;
 
 void loop() {
 
   potVal = analogRead(potPin);    // Lees de analoge waarde van de potmeter 0-1023
-  Serial.println(potVal);         // Toon de waarde in de seriële monitor
+  //Serial.println(potVal);         // Toon de waarde in de seriële monitor
 
-  potValProcessed = ( potVal / 1023 ) * 8;
+  potValProcessed = ( potVal / 1024 ) * 8 + 0.02;
   Serial.println(potValProcessed);
 
   for(int i = 0; i < sizeof(pARRAY)/sizeof(*pARRAY); i++) {
-    
+    if(potValProcessed < i) {
+      digitalWrite(pARRAY[i], HIGH);
+    }
+    else {
+      digitalWrite(pARRAY[i], LOW);
+    }
   }
   
 }
@@ -45,7 +50,6 @@ void loop() {
   if(pCURRENT >= 12) {
     loopState = 1;
   }
-
   if(loopState == 1) {
     pNEXT-- ;
   } else if ( loopState == 2) {
@@ -58,7 +62,6 @@ void loop() {
   if(pCURRENT >= 12) {
     loopStateNEXT = 1;
   }
-
 int ledValInverse = 0;
   // Fade uit
   for(int ledVal = 255; ledVal >= 0; ledVal -=1) {
