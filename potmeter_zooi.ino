@@ -7,12 +7,13 @@ float potVal = 0;
 // the setup function runs once when you press reset or power the board
 void setup() {
   Serial.begin(9600);
+  pinMode(potPin, INPUT);
   //Loop through array
   for(int i = 0; i < sizeof(pARRAY)/sizeof(*pARRAY); i++) {
     //set each to pinmode output
     pinMode(i, OUTPUT);
   }
-  pinMode(potPin, INPUT);
+  pinMode(13, INPUT);
 }
 
 float potValProcessed = 0;
@@ -26,10 +27,10 @@ void loop() {
   Serial.println(potValProcessed);
 
   for(int i = 0; i < sizeof(pARRAY)/sizeof(*pARRAY); i++) {
-    if(potValProcessed < i) {
+    if(potValProcessed - 1 > i) {
       digitalWrite(pARRAY[i], HIGH);
     }
-    else {
+    else if(potValProcessed - 1 < i) {
       digitalWrite(pARRAY[i], LOW);
     }
   }
