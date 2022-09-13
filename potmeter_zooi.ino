@@ -6,6 +6,7 @@ float potVal = 0;
 
 // the setup function runs once when you press reset or power the board
 void setup() {
+  
   Serial.begin(9600);
   pinMode(potPin, INPUT);
   //Loop through array
@@ -17,23 +18,41 @@ void setup() {
 }
 
 float potValProcessed = 0;
+float potValDecimal = 0;
+float potValInt = 0;
 
 void loop() {
-
-  potVal = analogRead(potPin);    // Lees de analoge waarde van de potmeter 0-1023
-  //Serial.println(potVal);         // Toon de waarde in de seriële monitor
-
+  //Initialize variable resistor
+  potVal = analogRead(potPin);    
+  //Process VarRes signal
   potValProcessed = ( potVal / 1024 ) * 8 + 0.02;
   Serial.println(potValProcessed);
+  //Process only decimal places
 
+  //Loop through array
   for(int i = 0; i < sizeof(pARRAY)/sizeof(*pARRAY); i++) {
+  
+  //Put whole numbers into signal to LED
     if(potValProcessed - 1 > i) {
       digitalWrite(pARRAY[i], HIGH);
     }
     else if(potValProcessed - 1 < i) {
       digitalWrite(pARRAY[i], LOW);
     }
+
+    int Changed = 0;
+    if(potValProcessed < i && Changed = 0) {
+      Changed = 1;
+      potValDecimal = potValProcessed - i;
+    }
+  //Put decimal places into signal to LED
+    digitalWrite(pARRAY[i] + 1, HIGH);     
+    delay(potValDecimal);
+   
+    digitalWrite(pARRAY[i] + 1, LOW);      
+    delay(potValDecimal);                 
   }
+  
   
 }
 
